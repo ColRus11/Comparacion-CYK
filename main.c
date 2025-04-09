@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <time.h>
-#include <string.h>  // <--- Esta línea faltaba
+#include <string.h>  
 
 extern int yyparse();
 extern void yyrestart(FILE*);
