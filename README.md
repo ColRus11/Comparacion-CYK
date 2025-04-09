@@ -1,77 +1,122 @@
-Comparación de Algoritmos CYK en C puro vs Bison
+
+# Comparación de Algoritmos CYK en C vs Bison
 
 Este proyecto tiene como objetivo comparar el rendimiento del algoritmo CYK (Cocke-Younger-Kasami) implementado en dos versiones diferentes:
 
-- Versión en C puro 
+- Versión en C puro
 - Versión utilizando Flex & Bison
 
-Estructura del proyecto
+---
+
+## Estructura del Proyecto
 
 Comparacion-CYK/
-- bison/ → Código de Flex & Bison
-  - parser.y 
-  - resultados.txt (resultados de Bison)
+├── bison/            → Código de Flex & Bison
+│   ├── parser.y
+│   ├── scanner.l
+│   └── resultados-b.txt      ← Resultados de ejecución
+│
+├── cyk-c/            → Implementación en C puro
+│   ├── cyk.c
+│   └── resultados-c.txt      ← Resultados de ejecución
+│
+├── graficar.py       → Script para graficar los resultados
+└── README.md         → Este archivo
 
-- cyk-c/ → Código de C puro
-  - cyk.c 
-  - resultados-c.txt (resultados de C puro)
 
-- graficar.py → Script para graficar los resultados
-- README.md → Este archivo
+---
 
-Gramática utilizada
+## Gramática utilizada (Forma Normal de Chomsky)
 
-La gramática es binaria y está en Forma Normal de Chomsky:
+En esta versión, se utiliza una gramática simple que acepta únicamente cadenas con repeticiones del patrón `"ab"`:
 
-S → AB | BC
-A → BA | a
-B → CC | b
-C → AB | a
+S → AB | SB 
+A → a 
+B → b 
 
-Cadenas de prueba
+Es decir, acepta cadenas como: `"ab"`, `"abab"`, `"ababab"`, etc.
 
-Se evaluaron múltiples cadenas como:
+---
 
-- baaba
-- aab
-- baba
-- ababa
-- ababab
-- aaaaabbbbb
-- aabbaabbaabbaabb
-- abababababababab
-- aaaaaaaabbbbbbbb
-- baabaabaaabbaabb
+## Cadenas de prueba utilizadas
 
-Cada implementación evalúa si la cadena es aceptada o rechazada, y mide el tiempo de ejecución.
+Se evaluaron las siguientes cadenas:
 
-Para compilar y ejecutar:
 
-- Para C:
-gcc -o cykc cyk.c -o cyk
+ab 
+abab 
+ababab 
+abababab 
+a 
+b 
+ba 
+aabb 
+aba 
+abba 
+abababababababababab 
+abababababababababababababababababab 
+abababababababababababababababababababababababab 
+aaaaaaaaaaaaaaaaaaaa 
+bbbbbbbbbbbbbbbbbbbb 
+abababababababababababababababababababababababababababababab 
+
+
+---
+
+## ¿Qué hace cada implementación?
+
+Cada versión:
+- Evalúa si la cadena es aceptada o no por la gramática,
+- Mide el **tiempo de ejecución** de forma precisa,
+- Imprime los resultados en la **consola** y los guarda en un archivo de texto.
+
+---
+
+## Cómo compilar y ejecutar
+
+### Versión en C puro
+
+gcc -o cykc cykk.c
 ./cykc
 
-- Para Bison:
+
+Genera salida en consola y en el archivo resultados-c.txt.
+
+---
+
+### Versión con Flex & Bison
 
 bison -d parser.y
-gcc -o cykb parser.tab.c
+flex scanner.l
+gcc -o cykb main.c parser.tab.c lex.yy.c -lfl
 ./cykb
 
-Gráfica de comparación
+
+Genera resultados en resultados-b.txt.
+
+---
+
+## Gráfica de comparación
 
 El archivo graficar.py genera una gráfica comparando los tiempos de ejecución de ambas versiones.
 
-Cómo ejecutar graficar.py:
+### Ejecutar:
 
 python3 graficar.py
 
+---
 
-Requisitos:
+## Requisitos
 
-Para poder graficar:
+Para generar las gráficas, necesitas instalar matplotlib:
 
 sudo apt install python3-matplotlib
 
-Autor:
 
-Sebastián Díaz – GitHub: @ColRus11
+---
+
+## Autor
+
+Sebastián Díaz
+GitHub: [@ColRus11]
+
