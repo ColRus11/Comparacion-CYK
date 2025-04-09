@@ -1,0 +1,17 @@
+Cadena       Resultado    Tiempo
+ab           Aceptada     0.000011
+abab         Aceptada     0.000009
+ababab       Aceptada     0.000004
+abababab     Aceptada     0.000004
+a            Rechazada    0.000003
+b            Rechazada    0.000002
+ba           Rechazada    0.000003
+aabb         Rechazada    0.000003
+aba          Rechazada    0.000003
+abba         Rechazada    0.000002
+abababababababababab Aceptada     0.000004
+abababababababababababababababababab Aceptada     0.000005
+abababababababababababababababababababababababab Aceptada     0.000006
+aaaaaaaaaaaaaaaaaaaa Rechazada    0.000002
+bbbbbbbbbbbbbbbbbbbb Rechazada    0.000002
+abababababababababababababababababababababababababababababab Aceptada     0.000007

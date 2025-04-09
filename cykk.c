@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,7 +7,13 @@
 
 // Reglas binarias en FNC
 int isRule(char A, char B, char* result) {
-    if ((A == 'S' && B == 'B') || (A == 'A' && B == 'B')) {
+    // S → AB
+    if ((A == 'A' && B == 'B')) {
+        *result = 'S';
+        return 1;
+    }
+    // S → AB y luego S (para repeticiones)
+    if ((A == 'S' && B == 'S')) {
         *result = 'S';
         return 1;
     }
@@ -66,6 +70,7 @@ int cyk(const char* w, int n) {
         }
     }
 
+    // Revisar si el símbolo inicial S está en la esquina superior derecha
     for (int i = 0; i < count[0][n - 1]; i++) {
         if (table[0][n - 1][i] == 'S') return 1;
     }
@@ -91,7 +96,6 @@ int main() {
         return 1;
     }
 
-    // Encabezado
     fprintf(archivo, "%-12s %-12s %s\n", "Cadena", "Resultado", "Tiempo");
     printf("%-12s %-12s %s\n", "Cadena", "Resultado", "Tiempo");
 
@@ -106,7 +110,6 @@ int main() {
         double tiempo = (double)(fin - inicio) / CLOCKS_PER_SEC;
         const char* estado = aceptada ? "Aceptada" : "Rechazada";
 
-        // Imprimir a consola y archivo en el mismo formato
         printf("%-12s %-12s %.6f\n", cadena, estado, tiempo);
         fprintf(archivo, "%-12s %-12s %.6f\n", cadena, estado, tiempo);
     }
@@ -115,3 +118,4 @@ int main() {
     printf("\nResultados guardados en 'resultados-c.txt'\n");
     return 0;
 }
+

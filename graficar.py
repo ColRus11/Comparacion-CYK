@@ -15,7 +15,7 @@ def leer_resultados_alineados(nombre_archivo):
     return cadenas, tiempos
 
 # Leer los archivos
-cadenas_bison, tiempos_bison = leer_resultados_alineados('resultados.txt')
+cadenas_bison, tiempos_bison = leer_resultados_alineados('resultados-b.txt')
 cadenas_c, tiempos_c = leer_resultados_alineados('resultados-c.txt')
 
 # Verificar coincidencias

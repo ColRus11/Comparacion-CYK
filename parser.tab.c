@@ -70,47 +70,12 @@
 #line 1 "parser.y"
 
 #include <stdio.h>
-#include <string.h>
-#include <time.h>
 #include <stdlib.h>
 
-// Estructuras CYK
-typedef struct {
-    int left;
-    int right1;
-    int right2;
-} ReglaBinaria;
+int yylex(void);
+void yyerror(const char *s);
 
-typedef struct {
-    int left;
-    char terminal;
-} ReglaTerminal;
-
-ReglaBinaria reglas_binarias[] = {
-    {0, 1, 2},
-    {0, 2, 3},
-    {1, 2, 1},
-    {2, 3, 3},
-    {3, 0, 1}
-};
-
-ReglaTerminal reglas_terminales[] = {
-    {1, 'a'},
-    {2, 'b'},
-    {3, 'a'}
-};
-
-#define MAX_LEN 100
-#define MAX_VAR 10
-int cyk[MAX_LEN][MAX_LEN][MAX_VAR];
-
-void analizar_cadena(const char *cadena, FILE *archivo);
-void yyerror(const char *s) {
-    fprintf(stderr, "Error: %s\n", s);
-}
-int yylex() { return 0; }
-
-#line 114 "parser.tab.c"
+#line 79 "parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -141,8 +106,11 @@ enum yysymbol_kind_t
   YYSYMBOL_YYEOF = 0,                      /* "end of file"  */
   YYSYMBOL_YYerror = 1,                    /* error  */
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
-  YYSYMBOL_YYACCEPT = 3,                   /* $accept  */
-  YYSYMBOL_input = 4                       /* input  */
+  YYSYMBOL_A = 3,                          /* A  */
+  YYSYMBOL_B = 4,                          /* B  */
+  YYSYMBOL_YYACCEPT = 5,                   /* $accept  */
+  YYSYMBOL_S = 6,                          /* S  */
+  YYSYMBOL_AB = 7                          /* AB  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -468,21 +436,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  2
+#define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   0
+#define YYLAST   3
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  3
+#define YYNTOKENS  5
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  2
+#define YYNNTS  3
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  2
+#define YYNRULES  4
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  3
+#define YYNSTATES  7
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   257
+#define YYMAXUTOK   259
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -521,14 +489,14 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     1,     2
+       2,     2,     2,     2,     2,     2,     1,     2,     3,     4
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    46,    46
+       0,    14,    14,    15,    18
 };
 #endif
 
@@ -544,7 +512,8 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "\"end of file\"", "error", "\"invalid token\"", "$accept", "input", YY_NULLPTR
+  "\"end of file\"", "error", "\"invalid token\"", "A", "B", "$accept",
+  "S", "AB", YY_NULLPTR
 };
 
 static const char *
@@ -554,7 +523,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-1)
+#define YYPACT_NINF (-4)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -568,7 +537,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -1,     0,    -1
+      -3,    -2,     1,    -3,    -4,    -4,    -4
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -576,19 +545,19 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,     0,     1
+       0,     0,     0,     2,     4,     1,     3
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -1,    -1
+      -4,     0,    -4
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     1
+       0,     2,     3
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -596,31 +565,31 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       2
+       1,     5,     4,     6
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0
+       3,     0,     4,     3
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     4,     0
+       0,     3,     6,     7,     4,     0,     6
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,     3,     4
+       0,     5,     6,     6,     7
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     0
+       0,     2,     1,     2,     2
 };
 
 
@@ -1083,14 +1052,8 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 2: /* input: %empty  */
-#line 46 "parser.y"
-                    { /* no hace nada */ }
-#line 1090 "parser.tab.c"
-    break;
 
-
-#line 1094 "parser.tab.c"
+#line 1057 "parser.tab.c"
 
       default: break;
     }
@@ -1283,70 +1246,11 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 48 "parser.y"
+#line 20 "parser.y"
 
 
-int main() {
-    const char *cadenas[] = {
-        "baaba", "aab", "baba", "ababa", "ababab", "aaaaabbbbb", "aabbaabbaabbaabb", "abababababababab", "aaaaaaaabbbbbbbb", "baabaabaaabbaabb"
-    };
-    int cantidad = sizeof(cadenas) / sizeof(cadenas[0]);
-
-    FILE *archivo = fopen("resultados.txt", "w");
-    if (!archivo) {
-        perror("No se pudo abrir resultados.txt");
-        return 1;
-    }
-
-    fprintf(archivo, "%-12s %-12s %s\n", "Cadena", "Resultado", "Tiempo");
-
-    for (int i = 0; i < cantidad; i++) {
-        analizar_cadena(cadenas[i], archivo);
-    }
-
-    fclose(archivo);
-    printf("\nResultados guardados en 'resultados.txt'\n");
-
-    return 0;
+void yyerror(const char *s) {
+    // No mostrar errores por reglas no coincidentes
 }
 
-void analizar_cadena(const char *cadena, FILE *archivo) {
-    int longitud = strlen(cadena);
-    memset(cyk, 0, sizeof(cyk));
-
-    clock_t inicio = clock();
-
-    for (int i = 0; i < longitud; i++) {
-        for (int r = 0; r < sizeof(reglas_terminales)/sizeof(ReglaTerminal); r++) {
-            if (cadena[i] == reglas_terminales[r].terminal)
-                cyk[i][i][reglas_terminales[r].left] = 1;
-        }
-    }
-
-    for (int l = 2; l <= longitud; l++) {
-        for (int i = 0; i <= longitud - l; i++) {
-            int j = i + l - 1;
-            for (int k = i; k < j; k++) {
-                for (int r = 0; r < sizeof(reglas_binarias)/sizeof(ReglaBinaria); r++) {
-                    int A = reglas_binarias[r].left;
-                    int B = reglas_binarias[r].right1;
-                    int C = reglas_binarias[r].right2;
-                    if (cyk[i][k][B] && cyk[k+1][j][C])
-                        cyk[i][j][A] = 1;
-                }
-            }
-        }
-    }
-
-    clock_t fin = clock();
-    double tiempo = (double)(fin - inicio) / CLOCKS_PER_SEC;
-
-    const char *resultado = cyk[0][longitud - 1][0] ? "Aceptada" : "Rechazada";
-
-    printf("Cadena: %-15s → %s\tTiempo: %.6f s\n", cadena, resultado, tiempo);
-
-    if (archivo) {
-        fprintf(archivo, "%-12s %-12s %.6f\n", cadena, resultado, tiempo);
-    }
-}
 
